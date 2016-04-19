@@ -42,7 +42,7 @@ AMINOACID_DICTIONARY = {
 }
 
 
-def transcribe(nucleotides):
+def translate(nucleotides):
     return TRANSCRIBE_DICTIONARY[nucleotides]
 
 

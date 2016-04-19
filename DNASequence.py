@@ -1,7 +1,7 @@
 STRAND_TYPE = ["sense", "template", "rna"]
 
 
-class DNASequence(object):
+class DNASequence():
     sequence = ""
     type = ""
     start = 0
@@ -13,7 +13,6 @@ class DNASequence(object):
     def __reverse__(self):
         self.sequence = self.sequence[len(self.sequence)-1:0:-1]
 
-    def __
 
 def build_sequence(type, start, sequence):
     if type not in STRAND_TYPE:
@@ -32,8 +31,6 @@ def build_sequence(type, start, sequence):
     seq.start = 5
     seq.end = 3
     return seq
-
-
 
 
 def reverse(s):
@@ -60,5 +57,3 @@ def detranslate(s):
     s = s.replace("U", "T")
     s = complement(s)
     return s
-
-

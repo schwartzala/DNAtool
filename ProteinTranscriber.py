@@ -5,8 +5,10 @@
 import AminoAcid
 import DNASequence
 
+
 def clip(s):
     return s[3:len(s) - 3]
+
 
 def transcribe(seq):
     aminoAcid = ""
@@ -92,9 +94,6 @@ def deTranslate(s):
     s = s.replace("U", "T")
     s = complement(s)
     return s
-
-
-
 
 
 def dnaReport(seq, strand):
