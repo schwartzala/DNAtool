@@ -2,8 +2,8 @@
 # Lab 4: Gene Expression
 
 # Amino Acid Dictionary
-import AminoAcid
-import DNASequence
+import codon
+import sequence
 
 
 def clip(s):
@@ -14,7 +14,7 @@ def transcribe(seq):
     aminoAcid = ""
     seq = clip(seq)
     while (len(seq) > 2):
-        aminoAcid = aminoAcid + AminoAcid.transcribe(seq[0:3])
+        aminoAcid = aminoAcid + codon.transcribe(seq[0:3])
         if aminoAcid[0:3] != "Met":
             aminoAcid = ""
         if aminoAcid[len(aminoAcid) - 3:len(aminoAcid)] == "END":
