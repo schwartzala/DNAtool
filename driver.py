@@ -35,24 +35,25 @@ while run:
                         # concat_lines method: See file_handler.py
                         seq = NucleotideSequence(concat_lines(file_loc))
                         if seq.sequence is not "":
+                            # Print out the sequence that was found.
                             # Perform a nested loop. The outer loop occurs twice. This is to ensure that
                             # the inner loop is performed on both the NucleotideSequence that was entered
                             # and its complement (which is obtained using the complement and reverse function
                             # of the NucleotideSequence object).
-                            print "Sense Strand\n"
-                            for x in (0, 1):
+                            print "Sense Strand:", str(seq) + "\n"
+                            for x in [0, 1]:
                                 # Inner loop is performing the print_protein function of the NucleotideSequence
                                 # object. This function takes the start index of the reading frame and proceeds
                                 # to translate the sequence into a string of amino acids. This loop ensures
                                 # that all three reading frames are observed and reported.
-                                for frame in (0, 1, 2):
+                                for frame in [0, 1, 2]:
+                                    # print_protein method: see NucleotideSequence.py
                                     seq.print_protein(frame)
                                 # If this is the first run, we need to also look at the complementary strand.
                                 if x == 0:
-                                    # This returns the reverse complement of the NucleotideSequence, ensuring
-                                    # that our sequence is properly translated from 5' to 3'.
+                                    # complement method: see NucleotideSequence.py
                                     seq.complement()
-                                    print "Complementary Strand"
+                                    print "Complementary Strand:", str(seq)
                                 print
                 else:
                     # If extension of file_loc is NOT ".txt", warn the user and cancel the operation.

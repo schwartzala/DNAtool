@@ -53,54 +53,74 @@ class NucleotideSequence:
         self.start = 5
         self.end = 3
 
-    # toString method: returns a string of the sequence
+    # __str__ override method: returns a string of the sequence
     def __str__(self):
         return str(self.start) + "'-" + self.sequence + "-" + str(self.end) + "'"
 
+    # complement method: finds the complementary strand
+    # of "dna" or "rna". The current strand represents one
+    # of the strands of the double helix structure that makes
+    # up dna.
+    def complement(self):
+        # Check if the sequence is dna. If so, we will be converting
+        # T to A and A to T.
+        if self.type == "dna":
+            nucleotide4 = "T"
+        # Otherwise, the sequence is "rna", meaning we will be converting
+        # U to A and A to U.
+        else:
+            nucleotide4 = "U"
+        # Convert all As to a placeholder.
+        self.sequence = self.sequence.replace("A", "x")
+        # Convert all (T/U) to A.
+        self.sequence = self.sequence.replace(nucleotide4, "A")
+        # Convert all of the placeholders (previously A) to (T/U)
+        self.sequence = self.sequence.replace("x", nucleotide4)
+        # Convert all Cs to a placeholder.
+        self.sequence = self.sequence.replace("C", "x")
+        # Convert all Gs to Cs.
+        self.sequence = self.sequence.replace("G", "C")
+        # Convert all of the placeholders (previously C) to Gs.
+        self.sequence = self.sequence.replace("x", "G")
+        # Flip the start and end primes, as the complementary strand
+        # goes in the opposite direction of the sense strand.
+        self.start = self.end
+        if self.end == 5:
+            self.end = 3
+        else:
+            self.end = 5
+        # Perform the reverse function to make the complementary strand
+        # sequence go in the same direction as the sense strand.
+        self.reverse()
+
     # reverse method: reverses the sequence
     def reverse(self):
+        # Reassigns the sequence in reverse, completely reversing the
+        # order of all characters in the sequence.
         self.sequence = self.sequence[::-1]
+        # Flip the start and end primes as the sequence now reads
+        # in reverse order.
         self.start = self.end
         if self.end == 5:
             self.end = 3
         else:
             self.end = 5
 
-    # complement method: finds the complementary strand
-    # of "dna" or "rna"
-    def complement(self):
-        if self.type == "dna":
-            nucleotide4 = "T"
-        else:
-            nucleotide4 = "U"
-        self.sequence = self.sequence.replace("A", "x")
-        self.sequence = self.sequence.replace(nucleotide4, "A")
-        self.sequence = self.sequence.replace("x", nucleotide4)
-        self.sequence = self.sequence.replace("C", "x")
-        self.sequence = self.sequence.replace("G", "C")
-        self.sequence = self.sequence.replace("x", "G")
-        self.start = self.end
-        if self.end == 5:
-            self.end = 3
-        else:
-            self.start = 5
-        self.reverse()
-
-    # toRNA method: if sequence is "dna", will convert
+    # to_rna method: if sequence is "dna", will convert
     # the sequence to "rna"
     def to_rna(self):
         if self.type == "dna":
             self.sequence = self.sequence.replace("T", "U")
             self.type = "rna"
 
-    # toDNA method: if sequence is "rna", will convert
+    # to_dna method: if sequence is "rna", will convert
     # the sequence to "dna"
     def to_dna(self):
         if self.type == "rna":
             self.sequence = self.sequence.replace("U", "T")
             self.type = "dna"
 
-    # toProtein method: sequence takes a reading frame
+    # print_protein method: sequence takes a reading frame
     # of index 0, 1, or 2.
     def print_protein(self, frame):
         # If Sequence is of type "dna", it must be converted
@@ -113,7 +133,7 @@ class NucleotideSequence:
             # Check if frame is a valid number (0, 1, 2). If valid, return
             # a ProteinSequence object generated from the NucleotideSequence
             # at the specified starting frame.
-            if frame >= 0 or frame <= 2:
+            if frame in [0, 1, 2]:
                 # protein String contains the list of amino acids translated from
                 # the sequence.
                 protein = ""
@@ -129,27 +149,40 @@ class NucleotideSequence:
                 # to the function. We then go as long as there are 3 characters to be
                 # read in. Finally, the 3 represents the step, since we want to skip ahead
                 # 3 characters each time we examine a codon.
+                if frame + 2 >= len(self.sequence):
+                    print "Frame", str(frame + 1), "\nDoes not exist. Sequence is too small.\n"
+                    return
                 for index in range(frame, len(self.sequence) - 2, 3):
                     # Take 3 characters starting at the current index and make them into a String.
                     codon = self.sequence[index:index+3]
                     # translate_codon method: See codon.py
                     amino_acid = translate_codon(codon)
-
+                    # Check to see if current amino acid is Methionine.
+                    # If it is, and reading is currently False, we are now
+                    # in an open reading frame. We enable highlighting using
+                    # the ansi code in our protein sequence.
                     if amino_acid is "M" and reading is False:
                         reading = True
                         protein = protein + highlight
                     else:
+                        # Check to see if current amino acid is a Stop codon.
+                        # If it is, and reading is currently True, we are no
+                        # longer in an open reading frame. We disable highlighting
+                        # using the ansi code in our protein sequence.
                         if amino_acid is "*" and reading is True:
                             reading = False
                             protein = protein + unhighlight
-                    #   if reading == False:
-                    #       amino_acid = amino_acid.lower()
+                    # Append the current amino acid onto the protein chain.
                     protein = protein + amino_acid
+                # Notify the user of the current reading frame.
                 print "Frame", str(frame + 1)
+                # Print out the protein sequence. Append an unhighlight ansi code
+                # in case the protein ended with an open reading frame.
                 print protein + unhighlight + "\n"
+                return
             # If not a valid number, inform the user that they must use a valid index.
             else:
                 print "Invalid reading frame! Reading frame must be of index 0, 1, or 2."
-        # If an exception is raised, inform the user that the reading frame number is invalid.
+        # If an exception is raised, inform the user that the reading frame is not an integer.
         except ValueError:
             print "Could not convert frame \"" + frame + "\" into an integer."
