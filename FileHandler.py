@@ -27,13 +27,13 @@ def concat_lines(file_loc):
     with open(file_loc) as inFile:
         # Iterate through each line contained in inFile.
         for line in inFile:
-            # Get rid of next line (\n) characters.
-            line = line.replace('\n', '')
-            # Trim any extra white space.
-            line = line.replace(' ', '')
-            # FASTA format contains a line with extra data that begins with a > symbol.
             # In case the file is a FASTA file, skip over the line if it contains the > symbol.
             if ">" not in line:
+                # Get rid of next line (\n) characters.
+                line = line.replace('\n', '')
+                # Trim any extra white space.
+                line = line.replace(' ', '')
+                # FASTA format contains a line with extra data that begins with a > symbol.
                 # Append the current line that has been reformatted onto the end of the big_line
                 big_line = big_line + line
     # Return the large String
