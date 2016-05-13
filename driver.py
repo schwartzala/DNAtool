@@ -1,8 +1,13 @@
-# help prompt that shows command usage.
+# Driver.py
+# AUTHOR: Alan Schwartz Jr.
+# LASTUPDATE: 05/12/16
+
+
 from FileHandler import *
 from NucleotideSequence import NucleotideSequence
 
 
+# help prompt that shows command usage.
 def print_help():
     print "[L]oad: Import a DNA or RNA sequence from file"
     print "[H]elp: Prompt usage script"
