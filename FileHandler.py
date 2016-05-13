@@ -1,6 +1,6 @@
 # FileHandler.py
-# AUTHOR: Alan Schwartz Jr.
-# LASTUPDATE: 05/12/16
+# Author: Alan Schwartz Jr.
+# Last Update: 05/12/16
 
 
 # check_file method checks to see if file location is valid. If so, it returns True. Otherwise, it returns False.
