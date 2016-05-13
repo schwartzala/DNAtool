@@ -1,8 +1,14 @@
+# NucleotideSequence.py
+# AUTHOR: Alan Schwartz Jr.
+# LASTUPDATE: 05/12/16
+
+
+from Codon import translate_codon
+
+
 # nucleotide_dict contains the valid nucleotides
 # for each type of strand, including a blank character
 # for invalid characters.
-from Codon import translate_codon
-
 nucleotide_dict = {
     "dna": ["A", "T", "C", "G", "-"],
     "rna": ["A", "U", "C", "G", "-"]
