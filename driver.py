@@ -17,7 +17,6 @@ while run:
     command = str(raw_input("Please enter a command: [L]oad / [H]elp / [E]xit\n")).lower()
     # If "e" or "exit", exit the program.
     if command == "e" or command == "exit":
-        print "See you later! o/"
         run = False
     else:
         # If "h" or "help", show help prompt.
@@ -26,33 +25,41 @@ while run:
         else:
             # If "l" or "load", prompt user to entire file location.
             if command == "l" or command == "load":
-                file_loc = str(raw_input("Please enter the location of your DNA / RNA sequence file: "))
-                # If extension of fileLoc is ".txt", perform the check_file function to make sure
+                file_loc = str(raw_input("Please enter the location of your DNA / RNA sequence file:\n"))
+                # If extension of file_loc is ".txt", perform the check_file function to make sure
                 # file exists and is visible.
-                if file_loc[len(file_loc) - 4: len(file_loc)] == ".txt":
+                if file_loc[len(file_loc) - 4: len(file_loc)].lower() == ".txt":
                     # check_file method: See file_handler.py
                     if check_file(file_loc):
                         # NucleotideSequence object: See NucleotideSequence.py
+                        # concat_lines method: See file_handler.py
                         seq = NucleotideSequence(concat_lines(file_loc))
-                        # Perform a nested loop. The outer loop occurs twice. This is the ensure that
-                        # the inner loop is performed on both the NucleotideSequence that was entered
-                        # and its complement (which is obtained using the complement and reverse function
-                        # of the NucleotideSequence object).
-                        print "Sense Strand\n"
-                        for x in range(0, 2):
-                            for frame in range(0, 3):
-                                seq.print_protein(frame)
-                            # If this is the first run, we need to also look at the complementary strand.
-                            if x == 0:
-                                # This returns the reverse complement of the NucleotideSequence, ensuring
-                                # that our sequence is properly translated from 5' to 3'.
-                                seq.complement()
-                                print "Complementary Strand"
-                            print
+                        if seq.sequence is not "":
+                            # Perform a nested loop. The outer loop occurs twice. This is to ensure that
+                            # the inner loop is performed on both the NucleotideSequence that was entered
+                            # and its complement (which is obtained using the complement and reverse function
+                            # of the NucleotideSequence object).
+                            print "Sense Strand\n"
+                            for x in (0, 1):
+                                # Inner loop is performing the print_protein function of the NucleotideSequence
+                                # object. This function takes the start index of the reading frame and proceeds
+                                # to translate the sequence into a string of amino acids. This loop ensures
+                                # that all three reading frames are observed and reported.
+                                for frame in (0, 1, 2):
+                                    seq.print_protein(frame)
+                                # If this is the first run, we need to also look at the complementary strand.
+                                if x == 0:
+                                    # This returns the reverse complement of the NucleotideSequence, ensuring
+                                    # that our sequence is properly translated from 5' to 3'.
+                                    seq.complement()
+                                    print "Complementary Strand"
+                                print
                 else:
-                    # If extension of fileLoc is NOT ".txt", warn the user and cancel the operation.
+                    # If extension of file_loc is NOT ".txt", warn the user and cancel the operation.
                     print "\"" + file_loc + "\" is not a valid file! File must have extension: \".txt\""
             # If command is not valid, inform the user and request another input.
             else:
-                print command, "not a valid command! Please use one of the following:"
+                print command, "is not a valid command! Please use one of the following:"
                 print_help()
+
+print "See you later! o/"

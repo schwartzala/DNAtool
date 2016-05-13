@@ -1,3 +1,5 @@
+# codon_dict: map structure that contains codon keys
+# and their associated amino acid values.
 codon_dict = {
     "UUU": "F", "UCU": "S", "UAU": "Y", "UGU": "C",
     "UUC": "F", "UCC": "S", "UAC": "Y", "UGC": "C",
@@ -18,6 +20,9 @@ codon_dict = {
 }
 
 
+# UNUSED IN DRIVER
+# prefix_dict: map structure that contains amino acid
+# single character keys and their full name values.
 prefix_dict = {
     "F": "Phenylalanine",
     "L": "Leucine",
@@ -43,22 +48,30 @@ prefix_dict = {
 }
 
 
+# translate_codon method: takes a codon and returns
+# the associated amino acid value from codon_dict.
 def translate_codon(codon):
-    if type(codon) != str:
-        print "invalid input:", codon
-        print "codon must be of type str"
+    # Check to see if codon is a String.
+    if type(codon) is not str:
+        print "Invalid codon:", codon
+        print "Codon must be of type str"
         return
-    if len(codon) != 3:
-        print "invalid input:", codon
-        print "codon must be of length 3"
+    # Check to see if codon is length 3.
+    if len(codon) is not 3:
+        print "Invalid codon:", codon
+        print "Codon must be of length 3"
         return
+    # Check to see if codon is in codon_dict.
+    # If not found, return a ?.
     if codon not in codon_dict:
-        print "invalid input:", codon
-        print "codon must be present in codon_dict"
-        return
+        return "?"
+    # If it is valid, return the appropriate
+    # amino acid value.
     return codon_dict[codon]
 
 
+# UNUSED IN DRIVER
+#
 def get_amino_acid(prefix):
     if type(prefix) != str:
         print "invalid input:", prefix

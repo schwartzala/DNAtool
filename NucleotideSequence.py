@@ -27,11 +27,11 @@ class NucleotideSequence:
     # single parameter, sequence, which should
     # be a "dna" or "rna" sequence.
     def __init__(self, sequence):
-        # Check to make sure sequence isn't erroneous
         sequence = str(sequence).upper()
+        # Check to make sure sequence isn't erroneous
         if len(sequence) < 3:
-            print "invalid input:", sequence
-            print "sequence must be at least 3 nucleotides long"
+            print "Invalid sequence:", sequence
+            print "Sequence must be at least 3 nucleotides long.\n"
             return
         # Check to see if sequence contains "rna" signature "U"
         if "U" not in sequence:
@@ -40,9 +40,9 @@ class NucleotideSequence:
             # Check to see if sequence accidentally contains both
             # "dna" signature T and "rna" signature "U"
             if "T" in sequence:
-                print "invalid input", sequence
-                print "dna sequence must contain ATCG"
-                print "rna sequence must contain AUCG"
+                print "Invalid sequence:", sequence
+                print "DNA Sequences only contain ATCG"
+                print "RNA Sequences only contain AUCG"
                 return
             self.type = "rna"
         # Make invalid characters empty character "-"
@@ -114,13 +114,27 @@ class NucleotideSequence:
             # a ProteinSequence object generated from the NucleotideSequence
             # at the specified starting frame.
             if frame >= 0 or frame <= 2:
+                # protein String contains the list of amino acids translated from
+                # the sequence.
                 protein = ""
+                # reading boolean keeps track of whether or not the current codon
+                # is located in a reading frame.
                 reading = False
-                highlight = '\033[94m'
-                unhighlight = '\033[0m'
-                for x in range(frame, len(self.sequence) - 2, 3):
-                    codon = self.sequence[x:x+3]
+                # ansi colors are used for printing highlighted color in the terminal.
+                # NOTE: Only works for Unix-based systems.
+                highlight = '\033[94m'  # ansi for blue text
+                unhighlight = '\033[0m'  # ansi for regular text
+                # We examine each codon, which is a set of three characters in the sequence.
+                # We start at the initial index of the reading frame that was passed in
+                # to the function. We then go as long as there are 3 characters to be
+                # read in. Finally, the 3 represents the step, since we want to skip ahead
+                # 3 characters each time we examine a codon.
+                for index in range(frame, len(self.sequence) - 2, 3):
+                    # Take 3 characters starting at the current index and make them into a String.
+                    codon = self.sequence[index:index+3]
+                    # translate_codon method: See codon.py
                     amino_acid = translate_codon(codon)
+
                     if amino_acid is "M" and reading is False:
                         reading = True
                         protein = protein + highlight
@@ -128,9 +142,11 @@ class NucleotideSequence:
                         if amino_acid is "*" and reading is True:
                             reading = False
                             protein = protein + unhighlight
+                    #   if reading == False:
+                    #       amino_acid = amino_acid.lower()
                     protein = protein + amino_acid
-                print "Frame", frame
-                print protein + "\n"
+                print "Frame", str(frame + 1)
+                print protein + unhighlight + "\n"
             # If not a valid number, inform the user that they must use a valid index.
             else:
                 print "Invalid reading frame! Reading frame must be of index 0, 1, or 2."

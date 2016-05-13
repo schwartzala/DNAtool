@@ -3,7 +3,7 @@ def check_file(file_loc):
     try:
         open(file_loc)
     except IOError:
-        print "\"" + file_loc + "\" is not a valid file location! File could not be found."
+        print "\"" + file_loc + "\" is not a valid file location! File could not be found.\n"
         return False
     return True
 
@@ -14,5 +14,6 @@ def concat_lines(file_loc):
     with open(file_loc) as f:
         for line in f:
             line = line.replace('\n', '')
+            line = line.replace(' ', '')
             big_line = big_line + line
     return big_line
