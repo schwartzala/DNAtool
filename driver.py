@@ -1,5 +1,5 @@
 # help prompt that shows command usage.
-from file_handler import *
+from FileHandler import *
 from NucleotideSequence import NucleotideSequence
 
 
@@ -29,10 +29,10 @@ while run:
                 # If extension of file_loc is ".txt", perform the check_file function to make sure
                 # file exists and is visible.
                 if file_loc[len(file_loc) - 4: len(file_loc)].lower() == ".txt":
-                    # check_file method: See file_handler.py
+                    # check_file method: See FileHandler.py
                     if check_file(file_loc):
                         # NucleotideSequence object: See NucleotideSequence.py
-                        # concat_lines method: See file_handler.py
+                        # concat_lines method: See FileHandler.py
                         seq = NucleotideSequence(concat_lines(file_loc))
                         if seq.sequence is not "":
                             # Print out the sequence that was found.

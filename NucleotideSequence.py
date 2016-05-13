@@ -1,7 +1,7 @@
 # nucleotide_dict contains the valid nucleotides
 # for each type of strand, including a blank character
 # for invalid characters.
-from codon import translate_codon
+from Codon import translate_codon
 
 nucleotide_dict = {
     "dna": ["A", "T", "C", "G", "-"],
@@ -155,7 +155,7 @@ class NucleotideSequence:
                 for index in range(frame, len(self.sequence) - 2, 3):
                     # Take 3 characters starting at the current index and make them into a String.
                     codon = self.sequence[index:index+3]
-                    # translate_codon method: See codon.py
+                    # translate_codon method: See Codon.py
                     amino_acid = translate_codon(codon)
                     # Check to see if current amino acid is Methionine.
                     # If it is, and reading is currently False, we are now
