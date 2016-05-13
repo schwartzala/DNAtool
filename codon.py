@@ -1,6 +1,6 @@
 # Codon.py
-# AUTHOR: Alan Schwartz Jr.
-# LASTUPDATE: 05/12/16
+# Author: Alan Schwartz Jr.
+# Last Update: 05/12/16
 
 
 # codon_dict: map structure that contains codon keys
