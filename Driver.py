@@ -31,7 +31,8 @@ while run:
             # If "l" or "load", prompt user to entire file location.
             if command == "l" or command == "load":
                 file_loc = str(raw_input("Please enter the location of your DNA / RNA sequence file (.txt):\n" +
-                                         "EXAMPLES: data/maoa_fasta.txt , data/maoa_rna.txt , data/short_dna.txt\n"))
+                                         "EXAMPLES: data/maoa.txt , data/maoa_fasta.txt , "
+                                         "data/maoa_rna.txt , data/short_dna.txt\n"))
                 # If extension of file_loc is ".txt", perform the check_file function to make sure
                 # file exists and is visible.
                 if file_loc[len(file_loc) - 4: len(file_loc)].lower() == ".txt":
