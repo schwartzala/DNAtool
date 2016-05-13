@@ -1,9 +1,9 @@
-# check_file method checks to see if file location is valid.
+# check_file method checks to see if file location is valid. If so, it returns True. Otherwise, it returns False.
 def check_file(file_loc):
     try:
         open(file_loc)
     except IOError:
-        print "\"" + file_loc + "\" is not a valid file location"
+        print "\"" + file_loc + "\" is not a valid file location! File could not be found."
         return False
     return True
 

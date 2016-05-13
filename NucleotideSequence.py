@@ -1,6 +1,7 @@
 # nucleotide_dict contains the valid nucleotides
 # for each type of strand, including a blank character
 # for invalid characters.
+from codon import translate_codon
 
 nucleotide_dict = {
     "dna": ["A", "T", "C", "G", "-"],
@@ -12,7 +13,7 @@ nucleotide_dict = {
 # along with their current strand type ("dna" or
 # "rna") and the start and end of the sequence
 # (5 or 3).
-class Sequence:
+class NucleotideSequence:
     # Sequence of "dna" or "rna" characters
     sequence = ""
     # Strand type: "dna" or "rna"
@@ -27,6 +28,7 @@ class Sequence:
     # be a "dna" or "rna" sequence.
     def __init__(self, sequence):
         # Check to make sure sequence isn't erroneous
+        sequence = str(sequence).upper()
         if len(sequence) < 3:
             print "invalid input:", sequence
             print "sequence must be at least 3 nucleotides long"
@@ -50,15 +52,14 @@ class Sequence:
         self.sequence = sequence
         self.start = 5
         self.end = 3
-        return self
 
     # toString method: returns a string of the sequence
-    def __toString__(self):
-        return self.start + "'-" + self.sequence + "-" + self.DNASequence.end + "'"
+    def __str__(self):
+        return str(self.start) + "'-" + self.sequence + "-" + str(self.end) + "'"
 
     # reverse method: reverses the sequence
-    def __reverse__(self):
-        self.sequence = self.sequence[len(self.sequence)-1:0:-1]
+    def reverse(self):
+        self.sequence = self.sequence[::-1]
         self.start = self.end
         if self.end == 5:
             self.end = 3
@@ -67,7 +68,7 @@ class Sequence:
 
     # complement method: finds the complementary strand
     # of "dna" or "rna"
-    def __complement__(self):
+    def complement(self):
         if self.type == "dna":
             nucleotide4 = "T"
         else:
@@ -78,18 +79,61 @@ class Sequence:
         self.sequence = self.sequence.replace("C", "x")
         self.sequence = self.sequence.replace("G", "C")
         self.sequence = self.sequence.replace("x", "G")
+        self.start = self.end
+        if self.end == 5:
+            self.end = 3
+        else:
+            self.start = 5
         self.reverse()
 
     # toRNA method: if sequence is "dna", will convert
     # the sequence to "rna"
-    def __toRNA__(self):
+    def to_rna(self):
         if self.type == "dna":
             self.sequence = self.sequence.replace("T", "U")
             self.type = "rna"
 
     # toDNA method: if sequence is "rna", will convert
     # the sequence to "dna"
-    def __toDNA__(self):
+    def to_dna(self):
         if self.type == "rna":
             self.sequence = self.sequence.replace("U", "T")
             self.type = "dna"
+
+    # toProtein method: sequence takes a reading frame
+    # of index 0, 1, or 2.
+    def print_protein(self, frame):
+        # If Sequence is of type "dna", it must be converted
+        # into type "rna" before being translated.
+        if self.type is "dna":
+            self.to_rna()
+        # Convert frame into an integer.
+        try:
+            frame = int(frame)
+            # Check if frame is a valid number (0, 1, 2). If valid, return
+            # a ProteinSequence object generated from the NucleotideSequence
+            # at the specified starting frame.
+            if frame >= 0 or frame <= 2:
+                protein = ""
+                reading = False
+                highlight = '\033[94m'
+                unhighlight = '\033[0m'
+                for x in range(frame, len(self.sequence) - 2, 3):
+                    codon = self.sequence[x:x+3]
+                    amino_acid = translate_codon(codon)
+                    if amino_acid is "M" and reading is False:
+                        reading = True
+                        protein = protein + highlight
+                    else:
+                        if amino_acid is "*" and reading is True:
+                            reading = False
+                            protein = protein + unhighlight
+                    protein = protein + amino_acid
+                print "Frame", frame
+                print protein + "\n"
+            # If not a valid number, inform the user that they must use a valid index.
+            else:
+                print "Invalid reading frame! Reading frame must be of index 0, 1, or 2."
+        # If an exception is raised, inform the user that the reading frame number is invalid.
+        except ValueError:
+            print "Could not convert frame \"" + frame + "\" into an integer."
